@@ -6,3 +6,6 @@ Homestead.json
 .env
 .azk
 database/database.sqlite
+public/build/
+public/css/
+public/js/

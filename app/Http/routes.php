@@ -26,9 +26,8 @@
 
 Route::group(['middleware' => ['web']], function () {
 	Route::group(['middleware' =>['auth'], 'prefix' => 'admin'], function() {
-		Route::get('/users', function() {
-			return 'ok';
-		});
+        Route::get('/', 'DashboardController@index');
+		Route::get('/users', 'UsersController@index');
 	});
 
 	Route::get('/login', 'AuthController@loginForm');
