@@ -4,4 +4,7 @@
             Guarapuava do Bem
         </a>
     </div>
+    <div class="main-header__content">
+        @yield('header')
+    </div>
 </header>

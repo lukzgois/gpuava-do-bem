@@ -9,6 +9,7 @@ body {
 
 .main-header {
     display: flex;
+    align-items: center;
     width: 100%;
     background-color: $header-background-color;
 
@@ -24,6 +25,7 @@ body {
             text-decoration: none
         }
     }
+
 }
 
 .wrapper {
