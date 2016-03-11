@@ -1,4 +1,4 @@
-<nav>
+<nav class="side-menu">
     <ul>
         <li>
             <a href="/admin/users" title="Usuários">

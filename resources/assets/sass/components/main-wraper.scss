@@ -33,7 +33,7 @@ body {
     display: flex;
     flex: 1;
 
-    nav {
+    nav.side-menu {
         width: $navbar-width;
         background-color: $navbar-background-color;
 

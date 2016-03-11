@@ -17,5 +17,6 @@ class UsersTableSeeder extends Seeder
             'email' => 'teste@teste.com',
             'password' => 'teste'
         ]);
+
     }
 }

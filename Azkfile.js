@@ -1,5 +1,5 @@
 systems({
-  "app": {
+  "gpuava-do-bem": {
     // Dependent systems
     depends: ['postgres'], // postgres, mysql, mongodb ...
     // More images:  http://images.azk.io

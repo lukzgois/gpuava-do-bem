@@ -28,7 +28,14 @@ Route::group(['middleware' => ['web']], function () {
 	Route::group(['middleware' =>['auth'], 'prefix' => 'admin'], function() {
         Route::get('/', 'DashboardController@index');
 		Route::get('/users', 'UsersController@index');
+
+        Route::group(['prefix' => 'api', 'namespace' => 'Api'], function() {
+            Route::get('/users', 'UsersController@index');
+            Route::post('/users', 'UsersController@store');
+        });
 	});
+
+    
 
 	Route::get('/login', 'AuthController@loginForm');
 	Route::post('/login', 'AuthController@login');
