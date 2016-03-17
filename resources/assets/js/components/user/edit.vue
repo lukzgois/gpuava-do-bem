@@ -1,12 +1,13 @@
 <template>
     <gp-modal-form 
         :show.sync="showModal"
-        @show-create-form="showModal = true"
-        @modal-form-submited="createUser"
+        @show-edit-form="showModal = true"
+        @modal-form-submited="editUser"
         @modal-form-closed="reset"
+        @modal-form-opened="setUser"
     >
         <div slot="header">
-            Cadastrar Usuário
+            Editar Usuário: {{ user.name }}
         </div>
         <div>
             <div 
@@ -41,22 +42,6 @@
                     placeholder="E-Mail" />
                 <span class="text-danger">{{ errors.email }}</span>
             </div>
-
-            <div 
-                class="form-group"
-                :class="{'has-error' : errors.password}"
-            >
-                <label for="password" class="control-label">Senha</label>
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    v-model="user.password"
-                    autocomplete="off"
-                    placeholder="Senha" />
-                <span class="text-danger">{{ errors.password }}</span>
-            </div>
         </div>  
         <div slot="footer">
             <button
@@ -64,7 +49,7 @@
                 type="submit"
                 :disabled="ajaxInProgress"
             >
-                Cadastrar
+                Editar
             </button>
         </div>
     </gp-modal-form>
@@ -84,26 +69,31 @@ export default {
             ajaxInProgress: false,
             user: {
                 name: '',
-                email: '',
-                password: ''
+                email: ''
             },
             errors: {
                 name: '',
-                email: '',
-                password: ''
+                email: ''
             }
         }
     },
     methods: {
-        createUser() {
+        setUser() {
+            this.user = UserStore.current()
+            console.log(UserStore.current());
+            // this.user.name = UserStore.state.currentUser.name,
+            // this.user.email = UserStore.state.currentUser.email
+        },
+        editUser() {
+            console.log(UserStore.state.currentUser);
             if (this.ajaxInProgress) {
                 return;
             }
 
             this.ajaxInProgress = true;
-            this.$http.post('/admin/api/users', this.user).then((response) => {
+            this.$http.put('/admin/api/users/' + this.user.id, this.user).then((response) => {
                 this.ajaxInProgress = false;
-                this.resetErrors();
+                this.reset();
                 this.showModal = false;
 
                 UserStore.getPage(1);
@@ -113,21 +103,9 @@ export default {
             })
         },
         reset() {
-            this.resetUser();
-            this.resetErrors();
-        },
-        resetErrors() {
             this.errors = {
                 name: '',
-                email: '',
-                password: ''
-            }
-        },
-        resetUser() {
-            this.user = {
-                name: '',
-                email: '',
-                password: ''
+                email: ''
             }
         }
     }

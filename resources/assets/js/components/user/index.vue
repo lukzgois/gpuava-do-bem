@@ -2,6 +2,7 @@
     <div class="card">
         
         <gp-create-user></gp-create-user>
+        <gp-edit-user></gp-edit-user>
 
         <a 
             href="#"
@@ -25,10 +26,16 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td class="table__actions">
-                        <a href="#">
+                        <a
+                            href="#"
+                            @click.prevent="edit(user)"
+                        >
                             <i class="fa fa-pencil fa-fw"></i>
                         </a>
-                        <a href="#">
+                        <a
+                            href="#"
+                            @click.prevent="remove(user)"
+                        >
                             <i class="fa fa-trash fa-fw"></i>
                         </a>
                     </td>
@@ -48,16 +55,19 @@
 <script>
     import GpPaginator from '../paginator/index.vue';
     import GpCreateUser from './create.vue';
+    import GpEditUser from './edit.vue';
     import UserStore from '../../stores/user.js';
+    import swal from 'sweetalert';
 
     export default {
         components: {
-            GpPaginator, GpCreateUser
+            GpPaginator, GpCreateUser, GpEditUser
         },
         data() {
             return {
                 users: UserStore.state.users,
-                showCreateForm: false
+                showCreateForm: false,
+                currentUser: {}
             }
         },
         created() {
@@ -68,7 +78,15 @@
                 UserStore.getPage(page);
             },
             showModalForm() {
-                this.$broadcast('show-modal-form');
+                this.$broadcast('show-create-form');
+            },
+            edit(user) {
+                // TODO: fix bug when changing the user in the edit form changes in the list too!!
+                UserStore.current(user);
+                this.$broadcast('show-edit-form');
+            },
+            remove(user) {
+                //TODO: implement the sweetalert confirm dialog
             }
         }
     }

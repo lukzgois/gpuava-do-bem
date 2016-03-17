@@ -24,6 +24,7 @@
 |
 */
 
+//TODO: organize this hell of routes
 Route::group(['middleware' => ['web']], function () {
 	Route::group(['middleware' =>['auth'], 'prefix' => 'admin'], function() {
         Route::get('/', 'DashboardController@index');
@@ -32,16 +33,15 @@ Route::group(['middleware' => ['web']], function () {
         Route::group(['prefix' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/users', 'UsersController@index');
             Route::post('/users', 'UsersController@store');
+            Route::put('/users/{id}', 'UsersController@update');
         });
 	});
-
-    
 
 	Route::get('/login', 'AuthController@loginForm');
 	Route::post('/login', 'AuthController@login');
     Route::get('/logout', 'AuthController@logout');
 
     Route::get('/', function () {
-    	return view('welcome');
+    	return "Yeah, azk is ok. Go Work!";
 	});
 });

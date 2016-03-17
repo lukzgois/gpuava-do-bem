@@ -45,9 +45,11 @@ export default {
     watch: {
         show() {
             if(this.show) {
-                return $(this.$els.modalForm).modal()
+                this.$dispatch('modal-form-opened');
+                return $(this.$els.modalForm).modal();
             }
             
+            this.$dispatch('modal-form-closed');
             return $(this.$els.modalForm).modal('hide');
         }
     }

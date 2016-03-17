@@ -1,4 +1,5 @@
 import HttpService from '../services/http.js';
+import UserStub from '../stubs/user.js';
 
 export default {
     state: {
@@ -6,7 +7,8 @@ export default {
             data: [],
             lastPage: 1,
             currentPage: 1
-        }
+        },
+        currentUser: UserStub
     },
     init() {
         this.getPage(1);
@@ -17,5 +19,11 @@ export default {
             this.state.users.lastPage = response.data.last_page;
             this.state.users.currentPage = response.data.current_page;
         });
+    },
+    current(user = null) {
+        if (user) {
+            this.state.currentUser = user;
+        }
+        return this.state.currentUser
     }
 }
