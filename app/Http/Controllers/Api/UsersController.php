@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    public function index(UserRepository $repository)
+    public function index(Request $request, UserRepository $repository)
     {
-        return $repository->getAll();
+        return $repository->getAll($request->q);
     }
 
     public function store(UserCreate $request, UserRepository $repository)

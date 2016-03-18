@@ -13,8 +13,12 @@ export default {
     init() {
         this.getPage(1);
     },
-    getPage(page = 1) {
-        HttpService.get('/admin/api/users?page=' + page, (response) => {
+    getPage(page = 1, term = null) {
+        var url = '/admin/api/users?page=' + page;
+        if(term) {
+            url += '&q=' + term
+        }
+        HttpService.get(url, (response) => {
             this.state.users.data = response.data.data;
             this.state.users.lastPage = response.data.last_page;
             this.state.users.currentPage = response.data.current_page;
@@ -25,5 +29,8 @@ export default {
             this.state.currentUser = user;
         }
         return this.state.currentUser
+    },
+    search(term) {
+        this.getPage(1, term)
     }
 }

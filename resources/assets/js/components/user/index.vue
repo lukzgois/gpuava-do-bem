@@ -1,4 +1,21 @@
 <template>
+    
+    <div class="card">
+        <form>
+            <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="search"
+                    v-model="search_term"
+                    @keyup="search | debounce 500"
+                    name="search"
+                    placeholder="Buscar pelo nome ou email..">
+            </div>
+            <!-- TODO: put a button  to search -->
+        </form>
+    </div>
+
     <div class="card">
         
         <gp-create-user></gp-create-user>
@@ -67,6 +84,7 @@
             return {
                 users: UserStore.state.users,
                 showCreateForm: false,
+                search_term: null,
                 currentUser: {}
             }
         },
@@ -75,7 +93,7 @@
         },
         methods: {
             loadPage(page) {
-                UserStore.getPage(page);
+                UserStore.getPage(page, this.search_term);
             },
             showModalForm() {
                 this.$broadcast('show-create-form');
@@ -87,6 +105,9 @@
             },
             remove(user) {
                 //TODO: implement the sweetalert confirm dialog
+            },
+            search() {
+                UserStore.search(this.search_term);
             }
         }
     }

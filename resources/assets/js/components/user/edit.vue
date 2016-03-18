@@ -7,7 +7,7 @@
         @modal-form-opened="setUser"
     >
         <div slot="header">
-            Editar Usuário: {{ user.name }}
+            Editar Usuário: {{ UserStore.current().name }}
         </div>
         <div>
             <div 
@@ -58,6 +58,7 @@
 <script>
 import GpModalForm from '../modal-form/index.vue';
 import UserStore from '../../stores/user.js';
+import _ from 'lodash';
 
 export default {
     components: {
@@ -67,10 +68,8 @@ export default {
         return {
             showModal: false,
             ajaxInProgress: false,
-            user: {
-                name: '',
-                email: ''
-            },
+            user: null,
+            cached: null,
             errors: {
                 name: '',
                 email: ''
@@ -79,13 +78,10 @@ export default {
     },
     methods: {
         setUser() {
-            this.user = UserStore.current()
-            console.log(UserStore.current());
-            // this.user.name = UserStore.state.currentUser.name,
-            // this.user.email = UserStore.state.currentUser.email
+            this.cached = _.clone(UserStore.current());
+            this.user = UserStore.current();
         },
         editUser() {
-            console.log(UserStore.state.currentUser);
             if (this.ajaxInProgress) {
                 return;
             }
@@ -96,7 +92,8 @@ export default {
                 this.reset();
                 this.showModal = false;
 
-                UserStore.getPage(1);
+                UserStore.current(this.user);
+                console.log(UserStore.current());
             }, (response) => {
                 this.errors = response.data;
                 this.ajaxInProgress = false;
@@ -107,6 +104,11 @@ export default {
                 name: '',
                 email: ''
             }
+            UserStore.current(_.clone(this.cached));
+            //this.cached = null;
+
+            console.log(UserStore.current.name);
+
         }
     }
 }

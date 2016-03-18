@@ -25,10 +25,15 @@ class UserRepository extends BaseRepository
      *
      * @return EloquentCollection|Paginator
      */
-    public function getAll($take = 15, $paginate = true)
+    public function getAll($term = null, $take = 15, $paginate = true)
     {
         $query = $this->newQuery();
-        $query->orderBy('created_at', 'desc');
+        if (null !== $term) {
+            $query->whereRaw('LOWER(name) like ?', ['%' . strtolower($term) . '%'])
+                    ->orWhereRaw('LOWER(email) like ?', ['%' . strtolower($term) . '%']);
+        }
+
+        $query->orderBy('updated_at', 'desc');
 
         return $this->doQuery($query, $take, $paginate);
     }
