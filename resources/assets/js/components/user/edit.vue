@@ -3,11 +3,11 @@
         :show.sync="showModal"
         @show-edit-form="showModal = true"
         @modal-form-submited="editUser"
-        @modal-form-closed="reset"
+        @modal-form-closed="cancelEditing"
         @modal-form-opened="setUser"
     >
         <div slot="header">
-            Editar Usuário: {{ UserStore.current().name }}
+            Editar Usuário: {{ user.name }}
         </div>
         <div>
             <div 
@@ -68,7 +68,11 @@ export default {
         return {
             showModal: false,
             ajaxInProgress: false,
-            user: null,
+            userStore: UserStore,
+            user: {
+                name: null,
+                email: null
+            },
             cached: null,
             errors: {
                 name: '',
@@ -78,8 +82,8 @@ export default {
     },
     methods: {
         setUser() {
-            this.cached = _.clone(UserStore.current());
-            this.user = UserStore.current();
+            this.cached = _.clone(this.userStore.current()); //cache the user for rollback
+            this.user = this.userStore.current()
         },
         editUser() {
             if (this.ajaxInProgress) {
@@ -91,24 +95,24 @@ export default {
                 this.ajaxInProgress = false;
                 this.reset();
                 this.showModal = false;
-
-                UserStore.current(this.user);
-                console.log(UserStore.current());
             }, (response) => {
                 this.errors = response.data;
                 this.ajaxInProgress = false;
             })
         },
+        cancelEditing() {
+            this.reset();
+            _.assign(this.user, this.cached)
+        },
         reset() {
             this.errors = {
                 name: '',
                 email: ''
+            },
+            this.user = {
+                name: null,
+                email: null
             }
-            UserStore.current(_.clone(this.cached));
-            //this.cached = null;
-
-            console.log(UserStore.current.name);
-
         }
     }
 }

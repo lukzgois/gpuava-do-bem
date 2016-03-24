@@ -12,7 +12,6 @@
                     name="search"
                     placeholder="Buscar pelo nome ou email..">
             </div>
-            <!-- TODO: put a button  to search -->
         </form>
     </div>
 
@@ -83,6 +82,7 @@
         data() {
             return {
                 users: UserStore.state.users,
+                userStore: UserStore,
                 showCreateForm: false,
                 search_term: null,
                 currentUser: {}
@@ -100,7 +100,7 @@
             },
             edit(user) {
                 // TODO: fix bug when changing the user in the edit form changes in the list too!!
-                UserStore.current(user);
+                this.userStore.current(user);
                 this.$broadcast('show-edit-form');
             },
             remove(user) {
